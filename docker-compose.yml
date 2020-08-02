@@ -1,0 +1,16 @@
+version: '3.3'
+services:
+  app:
+    command: sh -c "mvn package && java -jar target/app.jar"
+    depends_on:
+      - tracing
+    image: maven:3.6.3-openjdk-11
+    volumes:
+      - ~/.m2:/root/.m2
+      - ./src:/app/src
+      - ./pom.xml:/app/pom.xml
+    working_dir: /app
+  tracing:
+    image: jaegertracing/all-in-one:1.8.1
+    ports:
+      - 16686:16686
